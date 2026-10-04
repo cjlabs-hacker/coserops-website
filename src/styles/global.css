@@ -96,15 +96,12 @@ main:focus {
 }
 
 .brand-mark {
-    display: grid;
-    place-items: center;
+    display: block;
     width: 34px;
     height: 34px;
+    flex: 0 0 34px;
     border-radius: 6px;
-    background: var(--deep);
-    color: var(--lime);
-    font-size: .72rem;
-    letter-spacing: .02em
+    object-fit: contain
 }
 
 .main-nav {
@@ -494,10 +491,7 @@ h3 {
     color: #fff
 }
 
-.brand--footer .brand-mark {
-    background: var(--lime);
-    color: var(--deep)
-}
+
 
 .site-footer p {
     max-width: 390px;

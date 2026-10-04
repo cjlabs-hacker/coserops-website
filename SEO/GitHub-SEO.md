@@ -71,9 +71,11 @@ https://www.coser.eu.org/en/
 https://github.com/cjlabs-hacker/coserops-website
 ```
 
-这属于后续可选页面修改，本次文档不代表已经添加。链接应使用普通可访问的 HTML `a`，不需要 SEO 插件、追踪 SDK 或客户端脚本。
+官网页脚已加入该链接，使用普通可访问的 HTML `a`，不依赖 SEO 插件、追踪 SDK 或客户端脚本。
 
 用途是提供导航、技术透明度和来源信息，不把它当作保证有效的外链排名策略。`Organization.sameAs` 仅指向能代表同一组织身份的页面，不因它是一个代码仓库就自动添加。
+
+GitHub 的 Actions、Projects、Security and quality、Insights 和 Settings 页面不作为官网 SEO 目标页面：其中部分页面需要登录或权限，公开可见的部分也不保证被 Google 建立索引。SEO 重点应放在仓库主页、README、About、Topics 和官网与仓库之间的普通链接。
 
 ## 5. 与 Search Console 的边界
 
@@ -94,7 +96,7 @@ GitHub 负责其域名的抓取入口。公开仓库可能被自动发现，但�
 - [ ] 确认 Website 字段为 `https://www.coser.eu.org/`。
 - [ ] 设置真实相关的 Topics。
 - [ ] 将审核后的 README 更新发布到仓库，检查语言导航和链接。
-- [ ] 如确需官网源码入口，再单独实施页面修改。
+- [x] 官网页脚已加入指向 GitHub 仓库的普通 HTML 链接，中文显示“官网源码”，英文显示“Website source”。
 
 每次域名、脚本或项目用途变化时，同步维护 About 与 README。只发布有意义的版本说明；不把 Stars 数量或搜索收录当作产品质量保证。
 
