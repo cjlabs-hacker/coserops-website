@@ -124,6 +124,7 @@ export const en = {
     "footer.description": "A multi-channel customer operations platform. Product capabilities and channel access are subject to published status.",
     "footer.explore": "Explore",
     "footer.website": "Website",
+    "footer.source": "Website source",
     "footer.notice": "Brand and public information website.",
     "navigation.main": "Main navigation",
     "navigation.breadcrumb": "Breadcrumb",

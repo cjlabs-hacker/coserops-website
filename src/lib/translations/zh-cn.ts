@@ -126,6 +126,7 @@ export const zhCN = {
     "footer.description": "多渠道客户运营平台。产品能力与渠道开放范围以公开状态为准。",
     "footer.explore": "浏览",
     "footer.website": "网站信息",
+    "footer.source": "官网源码",
     "footer.notice": "品牌与公开信息网站。",
     "navigation.main": "主导航",
     "navigation.breadcrumb": "面包屑导航",
