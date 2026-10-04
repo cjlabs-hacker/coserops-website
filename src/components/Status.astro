@@ -1,0 +1,5 @@
+---
+import {statusText, type Locale, type Status} from "../lib/site";
+const {locale, status} = Astro.props as { locale: Locale; status: Status };
+---
+<span class={`status status--${status}`}>{statusText(locale, status)}</span>

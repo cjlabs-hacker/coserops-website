@@ -1,0 +1,47 @@
+{
+	"name": "coserops-website",
+	"description": "CoserOps website built with Astro and Cloudflare Workers.",
+	"cloudflare": {
+		"label": "Astro Framework Starter",
+		"products": [
+			"Workers"
+		],
+		"categories": [],
+		"preview_icon_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/394ca3c9-d351-4036-035a-9f6dfa26dd00/public",
+		"preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/f40a6577-eed5-4f3e-cef4-b5ef0a1be100/preview",
+		"publish": true
+	},
+	"dependencies": {
+		"@astrojs/cloudflare": "^14.3.3",
+		"@astrojs/mdx": "^8.0.2",
+		"@astrojs/rss": "^4.0.19",
+		"@astrojs/sitemap": "3.6.1",
+		"astro": "^7.3.5",
+		"typescript": "5.9.3"
+	},
+	"devDependencies": {
+		"vite": "^8.3.2",
+		"wrangler": "^4.147.0"
+	},
+	"engines": {
+		"node": ">=22"
+	},
+	"private": true,
+	"scripts": {
+		"astro": "astro",
+		"build": "astro build",
+		"cf-typegen": "wrangler types",
+		"check": "astro build && tsc && wrangler deploy --dry-run",
+
+		"deploy:local": "npm run dev",
+		"update:local": "npm run dev",
+		"deploy:test": "npm run build && tsc && wrangler deploy --name coserops-website-test",
+		"update:test": "npm run deploy:test --",
+		"deploy:prod": "npm run build && tsc && wrangler deploy --name coserops-website",
+		"update:prod": "npm run deploy:prod --",
+		"deploy": "npm run deploy:prod --",
+		"dev": "astro dev",
+		"preview": "astro build && wrangler dev"
+	},
+	"type": "module"
+}

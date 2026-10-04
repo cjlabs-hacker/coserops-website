@@ -1,0 +1,7 @@
+---
+export function getStaticPaths(){ return locales.map(locale => ({params: {locale}})); }
+import Page from "./[...slug].astro";
+import { locales, type Locale } from "../../lib/site";
+const { locale } = Astro.params as { locale: Locale };
+---
+<Page {locale} slug=""/>

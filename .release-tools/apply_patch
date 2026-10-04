@@ -1,0 +1,31 @@
+#!/usr/bin/env python3
+import sys
+from pathlib import Path
+lines = sys.stdin.read().splitlines()
+i = 1
+while i < len(lines) and lines[i] != '*** End Patch':
+    header = lines[i]; i += 1
+    kind, name = header[4:].split(': ', 1)
+    path = Path(name)
+    body = []
+    while i < len(lines) and not lines[i].startswith('*** '):
+        body.append(lines[i]); i += 1
+    if kind == 'Add File':
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text('\n'.join(line[1:] for line in body) + '\n')
+    elif kind == 'Delete File':
+        path.unlink()
+    elif kind == 'Update File':
+        text = path.read_text()
+        hunks = []
+        for line in body:
+            if line.startswith('@@'): hunks.append([])
+            else: hunks[-1].append(line)
+        for hunk in hunks:
+            before = '\n'.join(line[1:] for line in hunk if line.startswith((' ', '-')))
+            after = '\n'.join(line[1:] for line in hunk if line.startswith((' ', '+')))
+            if text.count(before) != 1:
+                raise SystemExit(f'Ambiguous or missing context: {path}: {before[:100]}')
+            text = text.replace(before, after, 1)
+        path.write_text(text)
+    else: raise SystemExit(header)
