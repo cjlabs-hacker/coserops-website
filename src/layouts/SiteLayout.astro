@@ -14,7 +14,10 @@ interface Props {
 const { locale, title, description, slug = "", noindex = false } = Astro.props;
 const canonical = site + pathFor(locale, slug);
 const alternates = noindex ? [] : locales.filter(language => hasRoute(language, slug) && isIndexable(slug));
-const defaultUrl = !noindex && hasRoute("en", slug) && isIndexable(slug) ? site + pathFor("en", slug) : undefined;
+const defaultLocale = slug === "" ? "zh-cn" : "en";
+const defaultUrl = !noindex && hasRoute(defaultLocale, slug) && isIndexable(slug)
+    ? site + pathFor(defaultLocale, slug)
+    : undefined;
 ---
 <!doctype html>
 <html lang={localeInfo[locale].lang}>

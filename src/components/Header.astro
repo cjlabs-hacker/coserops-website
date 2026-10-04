@@ -32,7 +32,35 @@ const alternateLocales = supportedLocales.filter(language => language !== locale
                         class="language"
                         href={pathFor(language, hasRoute(language, slug) ? slug : "")}
                         lang={localeInfo[language].lang}
-                    >{localeInfo[language].name}</a>
+                        hreflang={localeInfo[language].lang}
+                        aria-label={localeInfo[language].name}
+                        title={localeInfo[language].name}
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="28"
+                            height="28"
+                            viewBox="0 0 30 30"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.75"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            aria-hidden="true"
+                            focusable="false"
+                        >
+                            <path
+                                d="M5 2h13a3 3 0 0 1 3 3v8a3 3 0 0 1-3 3h-9l-5 4v-5a3 3 0 0 1-2-3V5a3 3 0 0 1 3-3Z"
+                                fill="#fff"
+                            />
+                            <path d="M6 6h8v5H6zM10 4v10"/>
+                            <path
+                                d="M15 11h10a3 3 0 0 1 3 3v7a3 3 0 0 1-3 3v4l-5-4h-5a3 3 0 0 1-3-3v-7a3 3 0 0 1 3-3Z"
+                                fill="#fff"
+                            />
+                            <path d="m16.5 21 3-7 3 7m-5-2h4"/>
+                        </svg>
+                    </a>
                 ))
             }
             <a class="button button--compact" href={pathFor(locale, "contact")}>{l.contact}</a>

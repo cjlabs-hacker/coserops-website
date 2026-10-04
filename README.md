@@ -24,7 +24,7 @@ The site is available locally at `http://localhost:4321`.
 
 ## Published routes
 
-- `/` language selector (not indexed)
+- `/` redirects to `/zh-cn/` with HTTP 302; visitors can switch languages in the header
 - `/zh-cn/` and `/en/` localized home pages
 - Localized `product`, `solutions`, `channels`, `resources`, `about`, `contact`, `privacy`, and `terms` routes
 - Scenario detail routes under `solutions/` and channel detail routes under `channels/`
@@ -44,4 +44,4 @@ without falling back to another language.
 To add a language, register its metadata and complete translation resource in
 `i18n.ts`, then supply its page metadata and published routes in `src/lib/site.ts`.
 Homepage routes, language-switch links, and SEO language tags use the registry.
-The root language chooser remains a separately curated entry page.
+The root entry redirects to the Chinese homepage without browser-language detection. Homepage `x-default` points to `/zh-cn/`; other indexable pages retain their English equivalent as `x-default`.

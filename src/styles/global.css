@@ -116,7 +116,7 @@ main:focus {
     font-weight: 650
 }
 
-.main-nav a, .language {
+.main-nav a {
     padding: .35rem 0
 }
 
@@ -135,8 +135,13 @@ main:focus {
 }
 
 .language {
-    font-size: .84rem;
-    font-weight: 700
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+    border-radius: var(--radius)
 }
 
 .button {
@@ -739,10 +744,6 @@ h3 {
 
     .brand small {
         display: none
-    }
-
-    .language {
-        font-size: .76rem
     }
 
     .button--compact {
