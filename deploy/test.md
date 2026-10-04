@@ -20,13 +20,15 @@ npx wrangler whoami
 npm run deploy:test
 ```
 
-脚本先构建并检查 TypeScript，再发布；前一步失败就停止。仅预演可运行 `npm run deploy:test -- --dry-run`。部署成功后以终端输出和控制台地址为准。站点元信息的域名由 `astro.config.mjs` 的 `site` 决定，正式使用时再设置为实际域名并重新发布。
+脚本先构建并检查 TypeScript，再发布；前一步失败就停止。仅预演可运行 `npm run deploy:test -- --dry-run`。部署成功后以终端输出和控制台地址为准。站点元信息保持正式地址 `https://www.coser.eu.org`，不改为测试地址。
 
-首次使用 workers.dev 可能需要先设置账户子域或启用该访问入口。域名和测试 Worker 不需要 Cloudflare Pages 项目，当前也不需要 D1 binding。
+首次使用 workers.dev 可能需要先设置账户子域或启用该访问入口。当前不保证任何测试或预览域名已配置。无需 Cloudflare Pages 项目；适配器生成的运行时绑定仍需检查，独立 Worker 名称不自动隔离资源或访问权限。
 
 ## 更新测试环境
 
 更新源码，依赖有变更时执行 `npm ci`，执行 `npm run update:test`。登录失效时重新登录。
+
+更新预演使用 `npm run update:test -- --dry-run`，参数经别名内置的 `--` 继续传给 Wrangler。
 
 首次部署和更新使用同一个发布操作：不存在时创建，存在时更新同名 Worker。脚本固定选择测试 Worker；不要使用 `npm run deploy` 更新测试，它指向生产。
 
@@ -37,11 +39,16 @@ npm run deploy:test
 ```sh
 TEST_SITE_URL='https://coserops-website-test.YOUR-SUBDOMAIN.workers.dev'
 curl -I "$TEST_SITE_URL/"
-curl -I "$TEST_SITE_URL/about/"
-curl -I "$TEST_SITE_URL/sitemap-index.xml"
+curl -I "$TEST_SITE_URL/zh-cn/"
+curl -I "$TEST_SITE_URL/en/"
+curl -I "$TEST_SITE_URL/zh-cn/about/"
+curl -I "$TEST_SITE_URL/en/about/"
+curl -I "$TEST_SITE_URL/sitemap.xml"
+curl -I "$TEST_SITE_URL/sitemap-zh-cn.xml"
+curl -I "$TEST_SITE_URL/sitemap-en.xml"
 ```
 
-检查页面标题、canonical、分享图片、站点地图域名、导航和手机显示。已实现的表单还需验证实际接收、失败反馈及专用测试收件人；当前模板尚无该能力。
+公开可访问时，`/` 应返回 HTTP 302，`Location` 指向 `/zh-cn/`；其余上述路径应返回 200。检查页面标题、canonical、站点地图域名、语言切换、导航和手机显示，canonical 与站点地图仍使用正式域名。当前没有配置分享图片，不将其作为已有功能验收。`/zh-cn/contact/` 与 `/en/contact/` 的表单已禁用、无接收后端，只检查禁用状态与说明，不做提交测试。
 
 测试站默认不能视为私有。未公开内容应配置 Cloudflare Access 等访问控制，并确认 workers.dev、预览地址和其他入口不会绕过保护。启用 Access 后，未认证的 curl 返回登录跳转或拒绝是正常现象，应在认证后验收。
 

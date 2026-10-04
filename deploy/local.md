@@ -1,6 +1,6 @@
 # 本地运行与更新
 
-本地运行不向 Cloudflare 发布。先阅读 [三环境说明](README.md)，准备 Node.js 22.12+ 的 22.x 或 Node.js 24 LTS 和 npm。
+本地运行不向 Cloudflare 发布。先阅读 [三环境说明](README.md)，准备 Node.js 22.12+ 和 npm 9.6.5+。
 
 ## 首次开发
 
@@ -8,10 +8,10 @@
 
 ```sh
 npm ci
-npm run deploy:local -- --host 127.0.0.1
+npm run deploy:local -- -- --host 127.0.0.1
 ```
 
-默认打开 `http://127.0.0.1:4321/`，以终端实际输出为准。保持终端运行，源码修改通常会热更新。当前没有远程业务绑定，本地开发不需要 Cloudflare 登录；未来配置远程绑定后需重新确认是否会访问真实服务。
+访问 `http://127.0.0.1:4321/`，端口以终端实际输出为准。保持终端运行，源码修改通常会热更新。默认本地开发无需 Cloudflare 登录；适配器可能生成运行时绑定，启用远程资源前应检查配置。额外一层 `--` 用于穿过 `npm run dev` 将参数传给 Astro；无需参数时直接运行 `npm run deploy:local`。
 
 ## 接近部署环境的本机预览
 
@@ -29,7 +29,7 @@ npx wrangler dev --local --ip 127.0.0.1 --port 8787
 
 ## 更新与停止
 
-修改依赖或配置后，在旧服务终端按 Ctrl+C，再执行 `npm ci`，使用 `npm run update:local -- --host 127.0.0.1` 重启开发服务。两个本地脚本均为 `npm run dev` 的别名，不会远程发布或关闭旧服务。只有源码变更时通常无需重复安装依赖。
+需要重启时，在旧服务终端按 Ctrl+C，再使用 `npm run update:local -- -- --host 127.0.0.1`。仅依赖变化时重新执行 `npm ci`，普通源码或配置修改无需重复安装。两个本地脚本均为 `npm run dev` 的别名，不会远程发布或关闭旧服务。
 
 Wrangler 预览读取 `dist/`；源码改动后需重新构建。端口被占用时选择其他端口或停止已确认属于自己的旧服务，不应终止其他项目进程。
 
@@ -43,10 +43,15 @@ curl -I http://127.0.0.1:4321/
 
 ```sh
 curl -I http://127.0.0.1:8787/
-curl -I http://127.0.0.1:8787/about/
-curl -I http://127.0.0.1:8787/sitemap-index.xml
+curl -I http://127.0.0.1:8787/zh-cn/
+curl -I http://127.0.0.1:8787/en/
+curl -I http://127.0.0.1:8787/zh-cn/about/
+curl -I http://127.0.0.1:8787/en/about/
+curl -I http://127.0.0.1:8787/sitemap.xml
+curl -I http://127.0.0.1:8787/sitemap-zh-cn.xml
+curl -I http://127.0.0.1:8787/sitemap-en.xml
 ```
 
-首页、现有关于页和站点地图应返回成功。浏览器确认图片、样式、导航和手机布局；新业务页面仅在实现后纳入检查，不把尚未创建的 `/contact` 当作已有功能。
+`/` 应返回 HTTP 302，`Location` 指向 `/zh-cn/`；其余上述路径应返回 200。开发服务器也可用同一路径检查。浏览器确认样式、导航、语言切换和手机布局。
 
-当前没有联系表单 API，不需要执行参考项目的 `/api/query` 或 D1 查询。
+联系页为 `/zh-cn/contact/` 与 `/en/contact/`，表单与提交按钮均禁用，没有接收后端；验收禁用状态及说明即可，不做提交测试。
