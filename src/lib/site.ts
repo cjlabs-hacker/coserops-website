@@ -1,12 +1,14 @@
 export const site = "https://www.coser.eu.org";
-import {locales, t, type Locale} from "./i18n";
-
-export {locales, isLocale, type Locale} from "./i18n";
-
+import { locales, t, type Locale } from "./i18n";
+export { locales, isLocale, type Locale } from "./i18n";
 export type Status = "current" | "development" | "planned";
-
-type Page = { title: string; description: string; eyebrow: string; h1: string; intro: string };
-
+export type Page = {
+    title: string;
+    description: string;
+    eyebrow: string;
+    h1: string;
+    intro: string;
+};
 const zh = {
     home: {
         title: "CoserOps | 多渠道客户运营平台",
@@ -72,7 +74,6 @@ const zh = {
         intro: "本页面仅说明官方网站的信息使用边界，尚待法律审核；它不是产品服务协议。"
     }
 };
-
 const en: Record<keyof typeof zh, Page> = {
     home: {
         title: "CoserOps | Multi-channel Customer Operations Platform",
@@ -139,10 +140,12 @@ const en: Record<keyof typeof zh, Page> = {
     }
 };
 export type PageKey = keyof typeof zh;
-const pages: Record<Locale, Record<PageKey, Page>> = {"zh-cn": zh, en};
+const pages: Record<Locale, Record<PageKey, Page>> = { "zh-cn": zh, en };
 export const copy = (locale: Locale, key: PageKey): Page => {
     const page = pages[locale]?.[key];
-    if (!page) throw new Error(`Missing page content: ${locale}/${key}`);
+    if (!page) {
+        throw new Error(`Missing page content: ${locale}/${key}`);
+    }
     return page;
 };
 export const pathFor = (locale: Locale, slug = "") => {
@@ -167,35 +170,102 @@ export const labels = (locale: Locale) => ({
     home: t(locale, "nav.home"),
 });
 export const statusText = (locale: Locale, status: Status) => labels(locale)[status];
-
-export function details(locale: Locale) {
-
-    const channels = [
-        ["telegram", "Telegram", t(locale, "content.customer_conversations_bot_or_community_business_scenarios"), "planned", t(locale, "content.connection_method_account_permissions_and_group_scope_need")],
-        ["whatsapp", "WhatsApp", t(locale, "content.customer_communication_service_and_consent_based_outreach_direction"), "planned", t(locale, "content.business_platform_provider_templates_and_conversation_limits_need")],
-        ["sms", "SMS", t(locale, "content.consent_based_notifications_outreach_and_replies"), "planned", t(locale, "content.provider_geography_numbers_two_way_messaging_and_opt")],
-        ["email", t(locale, "content.email"), t(locale, "content.customer_communication_support_and_campaign_direction"), "planned", t(locale, "content.sending_and_receiving_domain_authentication_delivery_limits_and")]
-    ] as [string, string, string, Status, string][];
-    const solutions = [
-        ["lead-capture", t(locale, "content.lead_capture_and_follow_up"), t(locale, "content.bring_consented_lead_sources_customer_context_and_follow")],
-        ["consent-outreach", t(locale, "content.consent_based_customer_outreach"), t(locale, "content.plan_relevant_outreach_and_next_actions_around_consent")],
-        ["customer-support", t(locale, "content.customer_support_and_inbox"), t(locale, "content.help_teams_see_prior_conversation_context_and_outstanding")],
-        ["community-engagement", t(locale, "content.customer_and_community_engagement"), t(locale, "content.plan_ongoing_relationship_care_around_contact_interactions_and")]
-    ];
-    return {channels, solutions};
+interface Detail {
+    id: string;
+    title: string;
+    description: string;
 }
-
-export const routes = ["", ...Object.keys(zh).filter(key => key !== "home"), ...details("en").channels.map(([id]) => `channels/${id}`), ...details("en").solutions.map(([id]) => `solutions/${id}`)];
-export const publishedRoutes: Record<Locale, readonly string[]> = {"zh-cn": routes, en: routes};
+interface Channel extends Detail {
+    status: Status;
+    boundary: string;
+}
+export function details(locale: Locale) {
+    const channels: Channel[] = [
+        {
+            id: "telegram",
+            title: "Telegram",
+            description: t(locale, "content.customer_conversations_bot_or_community_business_scenarios"),
+            status: "planned",
+            boundary: t(locale, "content.connection_method_account_permissions_and_group_scope_need")
+        },
+        {
+            id: "whatsapp",
+            title: "WhatsApp",
+            description: t(locale, "content.customer_communication_service_and_consent_based_outreach_direction"),
+            status: "planned",
+            boundary: t(locale, "content.business_platform_provider_templates_and_conversation_limits_need")
+        },
+        {
+            id: "sms",
+            title: "SMS",
+            description: t(locale, "content.consent_based_notifications_outreach_and_replies"),
+            status: "planned",
+            boundary: t(locale, "content.provider_geography_numbers_two_way_messaging_and_opt")
+        },
+        {
+            id: "email",
+            title: t(locale, "content.email"),
+            description: t(locale, "content.customer_communication_support_and_campaign_direction"),
+            status: "planned",
+            boundary: t(locale, "content.sending_and_receiving_domain_authentication_delivery_limits_and")
+        }
+    ];
+    const solutions: Detail[] = [
+        {
+            id: "lead-capture",
+            title: t(locale, "content.lead_capture_and_follow_up"),
+            description: t(locale, "content.bring_consented_lead_sources_customer_context_and_follow")
+        },
+        {
+            id: "consent-outreach",
+            title: t(locale, "content.consent_based_customer_outreach"),
+            description: t(locale, "content.plan_relevant_outreach_and_next_actions_around_consent")
+        },
+        {
+            id: "customer-support",
+            title: t(locale, "content.customer_support_and_inbox"),
+            description: t(locale, "content.help_teams_see_prior_conversation_context_and_outstanding")
+        },
+        {
+            id: "community-engagement",
+            title: t(locale, "content.customer_and_community_engagement"),
+            description: t(locale, "content.plan_ongoing_relationship_care_around_contact_interactions_and")
+        }
+    ];
+    return { channels, solutions };
+}
+export const routes = [
+    "",
+    ...Object.keys(zh).filter(key => key !== "home"),
+    ...details("en").channels.map(({ id }) => `channels/${id}`),
+    ...details("en").solutions.map(({ id }) => `solutions/${id}`)
+];
+export const publishedRoutes: Record<Locale, readonly string[]> = { "zh-cn": routes, en: routes };
 export const hasRoute = (locale: Locale, slug: string) => publishedRoutes[locale].includes(slug);
 export const isIndexable = (slug: string) => !["privacy", "terms"].includes(slug);
-
+const isPageKey = (key: string): key is PageKey => Object.hasOwn(zh, key);
 export function pageFor(locale: Locale, slug = ""): Page {
-    if (!hasRoute(locale, slug)) throw new Error(`Unpublished route: ${locale}/${slug}`);
-    const base = copy(locale, (slug.split("/")[0] || "home") as PageKey);
-    if (!slug.includes("/")) return base;
-    const {channels, solutions} = details(locale);
-    const detail = (slug.startsWith("channels/") ? channels : solutions).find(([id]) => slug.endsWith(`/${id}`));
-    if (!detail) throw new Error(`Missing page content: ${slug}`);
-    return {...base, title: `${detail[1]} | CoserOps`, h1: detail[1], description: detail[2], intro: detail[2]};
+    if (!hasRoute(locale, slug)) {
+        throw new Error(`Unpublished route: ${locale}/${slug}`);
+    }
+    const key = slug.split("/")[0] || "home";
+    if (!isPageKey(key)) {
+        throw new Error(`Missing page content: ${slug}`);
+    }
+    const base = copy(locale, key);
+    if (!slug.includes("/")) {
+        return base;
+    }
+    const { channels, solutions } = details(locale);
+    const detail = (slug.startsWith("channels/") ? channels : solutions).find(({ id }) => slug === `${key}/${id}`);
+    if (!detail) {
+        throw new Error(`Missing page content: ${slug}`);
+    }
+    return {
+        ...base,
+        title: `${detail.title} | CoserOps`,
+        h1: detail.title,
+        description: detail.description,
+        intro: detail.description
+    };
 }

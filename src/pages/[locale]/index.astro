@@ -1,7 +1,16 @@
 ---
-export function getStaticPaths(){ return locales.map(locale => ({params: {locale}})); }
-import Page from "./[...slug].astro";
-import { locales, type Locale } from "../../lib/site";
-const { locale } = Astro.params as { locale: Locale };
+import PublishedPage from "../../components/PublishedPage.astro";
+import { isLocale, locales, pageFor, type Locale } from "../../lib/site";
+interface Props {
+    locale: Locale;
+}
+export function getStaticPaths() {
+    return locales.map(locale => ({ params: { locale }, props: { locale } }));
+}
+const { locale } = Astro.props;
+if (!isLocale(locale)) {
+    throw new Error("Invalid published locale");
+}
+const page = pageFor(locale);
 ---
-<Page {locale} slug=""/>
+<PublishedPage {locale} slug="" {page}/>

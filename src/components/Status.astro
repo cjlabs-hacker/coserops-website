@@ -1,5 +1,9 @@
 ---
-import {statusText, type Locale, type Status} from "../lib/site";
-const {locale, status} = Astro.props as { locale: Locale; status: Status };
+import { statusText, type Locale, type Status } from "../lib/site";
+interface Props {
+    locale: Locale;
+    status: Status;
+}
+const { locale, status } = Astro.props;
 ---
 <span class={`status status--${status}`}>{statusText(locale, status)}</span>

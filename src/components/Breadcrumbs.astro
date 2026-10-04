@@ -1,24 +1,49 @@
 ---
-import {t} from "../lib/i18n";
-import {labels, pageFor, pathFor, site, jsonLd, type Locale} from "../lib/site";
-const {locale, current, currentLabel} = Astro.props as { locale: Locale; current: string; currentLabel: string };
-const items = [{name: labels(locale).home, url: pathFor(locale)}];
+import { t } from "../lib/i18n";
+import { labels, pageFor, pathFor, site, jsonLd, type Locale } from "../lib/site";
+interface Props {
+    locale: Locale;
+    current: string;
+    currentLabel: string;
+}
+const { locale, current, currentLabel } = Astro.props;
+const items = [{ name: labels(locale).home, url: pathFor(locale) }];
 const parent = current.includes("/") ? current.split("/")[0] : undefined;
-if (parent) items.push({name: pageFor(locale, parent).eyebrow, url: pathFor(locale, parent)});
-items.push({name: currentLabel, url: pathFor(locale, current)});
+if (parent) {
+    items.push({ name: pageFor(locale, parent).eyebrow, url: pathFor(locale, parent) });
+}
+items.push({ name: currentLabel, url: pathFor(locale, current) });
 ---
 <nav class="breadcrumbs" aria-label={t(locale, "navigation.breadcrumb")}>
-    {items.map((item, index) =>
-            <>{index > 0 && <span aria-hidden="true">/</span>}{index === items.length - 1 ?
-                    <span aria-current="page">{item.name}</span> : <a href={item.url}>{item.name}</a>}</>)}
+    {
+        items.map((item, index) => (
+            <>
+                {
+                    index > 0 && (
+                        <span aria-hidden="true">/</span>
+                    )
+                }
+                {
+                    index === items.length - 1 ? (
+                        <span aria-current="page">{item.name}</span>
+                    ) : (
+                        <a href={item.url}>{item.name}</a>
+                    )
+                }
+            </>
+        ))
+    }
 </nav>
-<script type="application/ld+json" set:html={jsonLd({
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: items.map((item, index) => ({
-        "@type": "ListItem",
-        position: index + 1,
-        name: item.name,
-        item: site + item.url
-    }))
-})}/>
+<script
+    type="application/ld+json"
+    set:html={jsonLd({
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        itemListElement: items.map((item, index) => ({
+            "@type": "ListItem",
+            position: index + 1,
+            name: item.name,
+            item: site + item.url
+        }))
+    })}
+/>

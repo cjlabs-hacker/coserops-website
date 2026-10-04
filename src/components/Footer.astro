@@ -1,22 +1,35 @@
 ---
-import {t} from "../lib/i18n";
-import {labels, pathFor, type Locale} from "../lib/site";
-const {locale} = Astro.props as { locale: Locale }; const l = labels(locale);
+import { t } from "../lib/i18n";
+import { labels, pathFor, type Locale } from "../lib/site";
+interface Props {
+    locale: Locale;
+}
+const { locale } = Astro.props;
+const l = labels(locale);
 ---
 <footer class="site-footer">
     <div class="shell footer-grid">
-        <div><a class="brand brand--footer" href={pathFor(locale)}><span
-                class="brand-mark">CO</span><span>CoserOps<small>Coser Operations Center</small></span></a>
+        <div>
+            <a class="brand brand--footer" href={pathFor(locale)}>
+                <span class="brand-mark">CO</span>
+                <span>CoserOps<small>Coser Operations Center</small></span>
+            </a>
             <p>{t(locale, "footer.description")}</p>
         </div>
-        <div><p class="footer-title">{t(locale, "footer.explore")}</p><a
-                href={pathFor(locale, "product")}>{l.product}</a><a
-                href={pathFor(locale, "solutions")}>{l.solutions}</a><a
-                href={pathFor(locale, "channels")}>{l.channels}</a><a
-                href={pathFor(locale, "resources")}>{l.resources}</a></div>
-        <div><p class="footer-title">{t(locale, "footer.website")}</p><a
-                href={pathFor(locale, "about")}>{l.about}</a><a href={pathFor(locale, "contact")}>{l.contact}</a><a
-                href={pathFor(locale, "privacy")}>{l.privacy}</a><a href={pathFor(locale, "terms")}>{l.terms}</a></div>
+        <div>
+            <p class="footer-title">{t(locale, "footer.explore")}</p>
+            <a href={pathFor(locale, "product")}>{l.product}</a>
+            <a href={pathFor(locale, "solutions")}>{l.solutions}</a>
+            <a href={pathFor(locale, "channels")}>{l.channels}</a>
+            <a href={pathFor(locale, "resources")}>{l.resources}</a>
+        </div>
+        <div>
+            <p class="footer-title">{t(locale, "footer.website")}</p>
+            <a href={pathFor(locale, "about")}>{l.about}</a>
+            <a href={pathFor(locale, "contact")}>{l.contact}</a>
+            <a href={pathFor(locale, "privacy")}>{l.privacy}</a>
+            <a href={pathFor(locale, "terms")}>{l.terms}</a>
+        </div>
     </div>
     <div class="shell footer-bottom">© {new Date().getFullYear()}
         CoserOps. {t(locale, "footer.notice")}</div>

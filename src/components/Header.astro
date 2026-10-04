@@ -1,20 +1,41 @@
 ---
-import {t, localeInfo, locales as supportedLocales} from "../lib/i18n";
-import {hasRoute, labels, pathFor, type Locale} from "../lib/site";
-const {locale, slug = ""} = Astro.props as { locale: Locale; slug?: string };
+import { t, localeInfo, locales as supportedLocales } from "../lib/i18n";
+import { hasRoute, labels, pathFor, type Locale } from "../lib/site";
+interface Props {
+    locale: Locale;
+    slug?: string;
+}
+const { locale, slug = "" } = Astro.props;
 const l = labels(locale);
 const alternateLocales = supportedLocales.filter(language => language !== locale);
 ---
 <header class="site-header">
     <div class="shell nav-wrap">
-        <a class="brand" href={pathFor(locale)} aria-label="CoserOps home"><span class="brand-mark">CO</span><span>CoserOps<small>Coser Operations Center</small></span></a>
-        <nav class="main-nav"
-             aria-label={t(locale, "navigation.main")}>{(["product", "solutions", "channels", "resources", "about"] as const).map(item =>
-                <a href={pathFor(locale, item)}
-                   aria-current={slug === item || slug.startsWith(`${item}/`) ? "page" : undefined}>{l[item]}</a>)}</nav>
-        <div class="nav-actions">{alternateLocales.map(language => <a class="language"
-                                                                      href={pathFor(language, hasRoute(language, slug) ? slug : "")}
-                                                                      lang={localeInfo[language].lang}>{localeInfo[language].name}</a>)}<a
-                class="button button--compact" href={pathFor(locale, "contact")}>{l.contact}</a></div>
+        <a class="brand" href={pathFor(locale)} aria-label="CoserOps home">
+            <span class="brand-mark">CO</span>
+            <span>CoserOps<small>Coser Operations Center</small></span>
+        </a>
+        <nav class="main-nav" aria-label={t(locale, "navigation.main")}>
+            {
+                (["product", "solutions", "channels", "resources", "about"] as const).map(item => (
+                    <a
+                        href={pathFor(locale, item)}
+                        aria-current={slug === item || slug.startsWith(`${item}/`) ? "page" : undefined}
+                    >{l[item]}</a>
+                ))
+            }
+        </nav>
+        <div class="nav-actions">
+            {
+                alternateLocales.map(language => (
+                    <a
+                        class="language"
+                        href={pathFor(language, hasRoute(language, slug) ? slug : "")}
+                        lang={localeInfo[language].lang}
+                    >{localeInfo[language].name}</a>
+                ))
+            }
+            <a class="button button--compact" href={pathFor(locale, "contact")}>{l.contact}</a>
+        </div>
     </div>
 </header>

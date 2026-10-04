@@ -1,0 +1,460 @@
+---
+import { t } from "../lib/i18n";
+import SiteLayout from "../layouts/SiteLayout.astro";
+import Status from "./Status.astro";
+import Breadcrumbs from "./Breadcrumbs.astro";
+import { details, isIndexable, labels, pathFor, type Locale, type Page } from "../lib/site";
+interface Props {
+    locale: Locale;
+    slug: string;
+    page: Page;
+}
+const { locale, slug, page } = Astro.props;
+const l = labels(locale);
+const cycle = [
+    [
+        "01",
+        t(locale, "content.capture_leads"),
+        t(locale, "content.organize_consented_lead_sources_ownership_and_follow_up")
+    ],
+    [
+        "02",
+        t(locale, "content.run_consent_based_outreach"),
+        t(locale, "content.plan_relevant_outreach_around_customer_context_and_consent")
+    ],
+    [
+        "03",
+        t(locale, "content.continue_customer_support"),
+        t(locale, "content.help_service_teams_see_prior_context_and_open")
+    ],
+    [
+        "04",
+        t(locale, "content.build_customer_and_community_relationships"),
+        t(locale, "content.bring_contact_interactions_and_community_relationships_into_ongoing")
+    ]
+];
+const { channels: channelData, solutions: solutionData } = details(locale);
+const channel = channelData.find(({ id }) => slug === `channels/${id}`);
+---
+<SiteLayout
+    {locale}
+    title={page.title}
+    description={page.description}
+    slug={slug}
+    noindex={!isIndexable(slug)}
+>
+    {
+        !slug && (
+            <>
+                <section class="hero">
+                    <div class="shell hero-grid">
+                        <div>
+                            <p class="eyebrow">{page.eyebrow}</p>
+                            <h1>{page.h1}</h1>
+                            <p class="lead">{page.intro}</p>
+                            <div class="hero-actions">
+                                <a class="button" href={pathFor(locale, "contact")}>{l.discuss}</a>
+                                <a class="button button--secondary" href={pathFor(locale, "product")}>{l.explore}</a>
+                            </div>
+                        </div>
+                        <div class="visual-panel" aria-label={t(locale, "content.product_concept_illustration")}>
+                            <div class="visual-top">
+                                <span>{t(locale, "content.product_concept")}</span>
+                                <Status {locale} status="planned"/>
+                            </div>
+                            <div class="record">
+                                <strong>{t(locale, "content.unified_customer_record")}</strong>
+                                <small>{t(locale, "content.illustrative_data_not_a_shipped_product_interface")}</small>
+                            </div>
+                            <div class="context-lines">
+                                <span>Telegram · {t(locale, "content.lead_source")}</span>
+                                <span>Email · {t(locale, "content.consent_and_preference")}</span>
+                                <span>WhatsApp · {t(locale, "content.support_context")}</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section class="section section--white">
+                    <div class="shell">
+                        <div class="section-heading">
+                            <p class="eyebrow">{t(locale, "content.why_this_matters")}</p>
+                            <h2>{t(locale, "content.keep_customer_context_across_conversations")}</h2>
+                            <p>{t(locale, "content.when_leads_support_requests_and_community_interactions_happen")}</p>
+                        </div>
+                        <div class="grid grid--four">
+                            {
+                                cycle.map(([n, title, body]) => (
+                                    <article class="card">
+                                        <span class="card-index">{n}</span>
+                                        <h3>{title}</h3>
+                                        <p>{body}</p>
+                                    </article>
+                                ))
+                            }
+                        </div>
+                    </div>
+                </section>
+                <section class="section">
+                    <div class="shell grid grid--two">
+                        <div>
+                            <p class="eyebrow">{t(locale, "content.product_thread")}</p>
+                            <h2>{t(locale, "content.a_unified_record_connecting_channel_context")}</h2>
+                            <p>{t(locale, "content.identity_links_source_consent_and_preferences_interaction_history")}</p>
+                        </div>
+                        <div class="surface">
+                            <div class="status-row">
+                                <strong>{t(locale, "content.published_capability_status")}</strong>
+                                <Status {locale} status="development"/>
+                            </div>
+                            <p>{t(locale, "content.there_are_no_verified_live_capabilities_to_present")}</p>
+                            <a class="link-arrow" href={pathFor(locale, "product")}>{t(locale, "content.review_capability_boundaries")}</a>
+                        </div>
+                    </div>
+                </section>
+                <section class="section section--dark">
+                    <div class="shell">
+                        <div class="section-heading">
+                            <p class="eyebrow">{t(locale, "content.channels")}</p>
+                            <h2>{t(locale, "content.review_channel_purpose_and_real_status")}</h2>
+                        </div>
+                        <div class="grid grid--four">
+                            {
+                                channelData.map(({id, title: name, description: summary, status}) => (
+                                    <article class="card">
+                                        <div class="status-row">
+                                            <h3>{name}</h3>
+                                            <Status {locale} status={status}/>
+                                        </div>
+                                        <p>{summary}</p>
+                                        <a class="link-arrow" href={pathFor(locale, `channels/${id}`)}>{t(locale, "content.view_conditions")}</a>
+                                    </article>
+                                ))
+                            }
+                        </div>
+                    </div>
+                </section>
+                <section class="section section--white">
+                    <div class="shell">
+                        <p class="eyebrow">{t(locale, "content.next_step")}</p>
+                        <h2>{t(locale, "content.start_with_your_channels_and_workflow")}</h2>
+                        <p>{t(locale, "content.share_your_channels_and_workflow_so_we_can")}</p>
+                        <div class="cta-actions">
+                            <a class="button" href={pathFor(locale, "contact")}>{l.discuss}</a>
+                            <a class="button button--secondary" href={pathFor(locale, "resources")}>{l.resources}</a>
+                        </div>
+                    </div>
+                </section>
+            </>
+        )
+    }
+    {
+        slug && (
+            <>
+                <section class="page-hero">
+                    <div class="shell">
+                        <Breadcrumbs {locale} current={slug} currentLabel={page.h1}/>
+                        <p class="eyebrow">{page.eyebrow}</p>
+                        <h1>{page.h1}</h1>
+                        <p class="lead">{page.intro}</p>
+                    </div>
+                </section>
+                {
+                    slug === "product" && (
+                        <section class="section">
+                            <div class="shell">
+                                <div class="grid grid--two">
+                                    <div>
+                                        <h2>{t(locale, "content.organized_around_a_lifecycle_not_a_tool_list")}</h2>
+                                        <div class="grid">
+                                            {
+                                                cycle.map(([n, title, body]) => (
+                                                    <div class="card">
+                                                        <span class="card-index">{n}</span>
+                                                        <h3>{title}</h3>
+                                                        <p>{body}</p>
+                                                    </div>
+                                                ))
+                                            }
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <h2>{t(locale, "content.capabilities_and_boundaries")}</h2>
+                                        <div
+                                            class="table-scroll"
+                                            role="region"
+                                            tabindex="0"
+                                            aria-label={t(locale, "content.capabilities_and_boundaries")}
+                                        >
+                                            <table class="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>{t(locale, "content.direction")}</th>
+                                                        <th>{t(locale, "content.status")}</th>
+                                                        <th>{t(locale, "content.before_availability")}</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {
+                                                        cycle.map(([, title]) => (
+                                                            <tr>
+                                                                <td>{title}</td>
+                                                                <td>
+                                                                    <Status {locale} status="development"/>
+                                                                </td>
+                                                                <td>{t(locale, "content.implementation_permissions_limits_and_scope")}</td>
+                                                            </tr>
+                                                        ))
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="callout">
+                                            <strong>{t(locale, "content.important")}</strong>
+                                            <p>{t(locale, "content.in_development_does_not_mean_available_to_any")}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    )
+                }
+                {
+                    slug === "solutions" && (
+                        <section class="section">
+                            <div class="shell grid grid--two">
+                                {
+                                    solutionData.map(({id, title, description: body}) => (
+                                        <article class="card">
+                                            <Status {locale} status="planned"/>
+                                            <h2>{title}</h2>
+                                            <p>{body}</p>
+                                            <a class="link-arrow" href={pathFor(locale, `solutions/${id}`)}>{t(locale, "content.explore_this_scenario")}</a>
+                                        </article>
+                                    ))
+                                }
+                            </div>
+                        </section>
+                    )
+                }
+                {
+                    slug.startsWith("solutions/") && (
+                        <section class="section">
+                            <div class="shell grid grid--two">
+                                <article>
+                                    <h2>{t(locale, "content.workflow_to_discuss")}</h2>
+                                    <ol>
+                                        <li>{t(locale, "content.map_current_customer_touchpoints_owners_and_available_context")}</li>
+                                        <li>{t(locale, "content.confirm_consent_channel_restrictions_and_geographic_prerequisites")}</li>
+                                        <li>{t(locale, "content.assess_where_a_unified_record_and_next_actions")}</li>
+                                    </ol>
+                                </article>
+                                <aside class="surface">
+                                    <Status {locale} status="planned"/>
+                                    <h3>{t(locale, "content.published_status")}</h3>
+                                    <p>{t(locale, "content.this_is_a_product_scenario_example_not_a")}</p>
+                                    <a class="button" href={pathFor(locale, "contact")}>{l.discuss}</a>
+                                </aside>
+                            </div>
+                        </section>
+                    )
+                }
+                {
+                    slug === "channels" && (
+                        <section class="section">
+                            <div class="shell grid grid--two">
+                                {
+                                    channelData.map(({id, title: name, description: summary, status, boundary}) => (
+                                        <article class="card">
+                                            <div class="status-row">
+                                                <h2>{name}</h2>
+                                                <Status {locale} status={status}/>
+                                            </div>
+                                            <p>{summary}</p>
+                                            <p>
+                                                <strong>{t(locale, "content.prerequisite")}</strong>
+                                                {boundary}
+                                            </p>
+                                            <a class="link-arrow" href={pathFor(locale, `channels/${id}`)}>{t(locale, "content.view_channel_details")}</a>
+                                        </article>
+                                    ))
+                                }
+                            </div>
+                        </section>
+                    )
+                }
+                {
+                    channel && (
+                        <section class="section">
+                            <div class="shell grid grid--two">
+                                <article>
+                                    <Status {locale} status={channel.status}/>
+                                    <h2>{t(locale, "content.intended_use")}</h2>
+                                    <p>{channel.description}</p>
+                                    <h2>{t(locale, "content.connection_and_compliance_prerequisites")}</h2>
+                                    <p>{channel.boundary}</p>
+                                </article>
+                                <aside class="surface">
+                                    <h3>{t(locale, "content.status_note")}</h3>
+                                    <p>{t(locale, "content.this_channel_is_not_publicly_available_capabilities_offered")}</p>
+                                    <a class="button" href={pathFor(locale, "contact")}>{l.discuss}</a>
+                                </aside>
+                            </div>
+                        </section>
+                    )
+                }
+                {
+                    slug === "resources" && (
+                        <section class="section">
+                            <div class="shell">
+                                <div class="topic-list">
+                                    {
+                                        [
+                                            [
+                                                t(locale, "content.what_is_multi_channel_customer_operations"),
+                                                t(locale, "content.understand_leads_support_and_relationship_care_through_the")
+                                            ],
+                                            [
+                                                t(locale, "content.how_to_plan_customer_context"),
+                                                t(locale, "content.clarify_source_consent_interaction_history_and_follow_up")
+                                            ],
+                                            [
+                                                t(locale, "content.consent_and_opt_out_for_outreach"),
+                                                t(locale, "content.plan_outreach_under_real_channel_rules_and_applicable")
+                                            ],
+                                            [
+                                                t(locale, "content.channel_selection_and_support_workflows"),
+                                                t(locale, "content.compare_channel_conditions_rather_than_assuming_every_channel")
+                                            ]
+                                        ].map(([title, body]) => (
+                                            <article>
+                                                <Status {locale} status="planned"/>
+                                                <div>
+                                                    <h3>{title}</h3>
+                                                    <p>{body}</p>
+                                                </div>
+                                            </article>
+                                        ))
+                                    }
+                                </div>
+                                <div class="callout">
+                                    <p>{t(locale, "content.articles_will_be_published_only_when_they_have")}</p>
+                                </div>
+                            </div>
+                        </section>
+                    )
+                }
+                {
+                    slug === "about" && (
+                        <section class="section">
+                            <div class="shell legal-copy">
+                                <h2>{t(locale, "content.mission")}</h2>
+                                <p>{t(locale, "content.we_are_building_a_multi_channel_customer_operations")}</p>
+                                <h2>{t(locale, "content.the_role_of_this_website")}</h2>
+                                <p>{t(locale, "content.this_is_the_official_website_for_coserops_product")}</p>
+                                <div class="callout">
+                                    <p>{t(locale, "content.the_operating_entity_team_background_and_contact_channels")}</p>
+                                </div>
+                                <a class="button" href={pathFor(locale, "contact")}>{t(locale, "content.contact_the_coserops_team")}</a>
+                            </div>
+                        </section>
+                    )
+                }
+                {
+                    slug === "contact" && (
+                        <section class="section">
+                            <div class="shell grid grid--two">
+                                <div class="form" aria-describedby="form-note">
+                                    <p id="form-note" class="form-note">{t(locale, "content.inquiries_are_not_available_yet_these_fields_are")}</p>
+                                    <fieldset disabled class="form-fields" aria-describedby="form-note">
+                                        <legend>{t(locale, "content.inquiry_form_not_available_yet")}</legend>
+                                        <div class="form-grid">
+                                            <label class="field">
+                                                {t(locale, "content.name_optional")}
+                                                <input name="name" autocomplete="name" maxlength="80" />
+                                            </label>
+                                            <label class="field">
+                                                {t(locale, "content.company_or_organization_optional")}
+                                                <input name="organization" maxlength="120" />
+                                            </label>
+                                        </div>
+                                        <div class="form-grid">
+                                            <label class="field">
+                                                {t(locale, "content.preferred_reply_method")}
+                                                <select>
+                                                    <option value="">{t(locale, "content.choose_one")}</option>
+                                                    <option>{t(locale, "content.email")}</option>
+                                                    <option>{t(locale, "content.other_confirmed_method")}</option>
+                                                </select>
+                                            </label>
+                                            <label class="field">
+                                                {t(locale, "content.contact_detail")}
+                                                <input maxlength="160" />
+                                            </label>
+                                        </div>
+                                        <fieldset>
+                                            <legend>{t(locale, "content.channels_of_interest_optional")}</legend>
+                                            {
+                                                ["Telegram", "WhatsApp", "SMS", t(locale, "content.email")].map(name => (
+                                                    <label class="check">
+                                                        <input type="checkbox" name="channels" value={name} />
+                                                        {name}
+                                                    </label>
+                                                ))
+                                            }
+                                        </fieldset>
+                                        <label class="field">
+                                            {t(locale, "content.what_would_you_like_to_discuss")}
+                                            <textarea maxlength="2000" />
+                                        </label>
+                                        <label class="check">
+                                            <input type="checkbox" />{" "}
+                                            {t(locale, "content.i_understand_this_form_does_not_send_or")}
+                                        </label>
+                                        <button class="button disabled-button" type="button" disabled>{t(locale, "content.submission_is_not_available")}</button>
+                                    </fieldset>
+                                    <p class="form-note">{t(locale, "content.do_not_send_sensitive_information_customer_contact_lists")}</p>
+                                </div>
+                                <aside class="surface">
+                                    <Status {locale} status="planned"/>
+                                    <h2>{t(locale, "content.inquiry_delivery_is_pending")}</h2>
+                                    <p>{t(locale, "content.there_is_no_confirmed_email_telegram_or_whatsapp")}</p>
+                                </aside>
+                            </div>
+                        </section>
+                    )
+                }
+                {
+                    (slug === "privacy" || slug === "terms") && (
+                        <section class="section">
+                            <div class="shell legal-copy">
+                                <div class="callout">
+                                    <strong>{t(locale, "content.pending_legal_review")}</strong>
+                                    <p>{t(locale, "content.do_not_treat_this_draft_as_a_complete")}</p>
+                                </div>
+                                {
+                                    slug === "privacy" ? (
+                                        <>
+                                            <h2>{t(locale, "content.current_scope")}</h2>
+                                            <p>{t(locale, "content.the_site_does_not_connect_to_an_inquiry")}</p>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <h2>{t(locale, "content.use_of_website_information")}</h2>
+                                            <p>{t(locale, "content.product_directions_channel_status_and_resource_topics_are")}</p>
+                                        </>
+                                    )
+                                }
+                                <h2>{t(locale, "content.items_awaiting_confirmation")}</h2>
+                                <ul>
+                                    <li>{t(locale, "content.operating_and_legal_entity")}</li>
+                                    <li>{t(locale, "content.applicable_law_data_processing_basis_and_contact_channel")}</li>
+                                    <li>{t(locale, "content.product_service_agreement_and_actual_availability")}</li>
+                                </ul>
+                            </div>
+                        </section>
+                    )
+                }
+            </>
+        )
+    }
+</SiteLayout>
